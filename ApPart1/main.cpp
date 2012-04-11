@@ -1,63 +1,7 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <iterator>
-#include <time.h>
-#include "Car.h"
+#include "CarDB.h"
+#include <sstream>
 
 using namespace std;
-
-string getQuery()
-{
-	cout << "\nEnter the model you wish to search for: ";
-
-	string i;
-	getline(cin, i);
-	return i;
-	
-	/*
-	// Uses iterators, but will only read once from the buffer.
-	// It is most likely because it reaches the 'eof', and of course there will be no
-	// more data beyond that point.
-	istreambuf_iterator<char> eos;               // end-of-range iterator
-	istreambuf_iterator<char> iit (cin.rdbuf()); // stdin iterator
-	string str;
-
-	cout << "\nEnter the model you wish to search for: ";
-
-	while (iit!=eos && *iit!='\n'){
-		str += *iit++;
-	}
-
-	return str;
-	*/
-}
-
-void search(const string& brand, vector<Car>* cars)
-{
-	Car searchCar(brand);
-
-	vector<Car>::iterator it = cars->begin();
-
-	time_t rawtime;	
-	time ( &rawtime );
-	struct tm * timeinfo = localtime ( &rawtime );
-	string now = asctime (timeinfo);
-
-	while(it != cars->end())
-	{
-		it = find(it, cars->end(), searchCar);
-		if(it == cars->end())
-			break;
-
-		cout << *it << "\n";
-
-		it->lastViewed = now;
-
-		++it;
-	}
-}
 
 int main()
 {
@@ -70,18 +14,49 @@ int main()
 	cars.push_back(Car("Mazda", "626", 2005, 315000));
 	cars.push_back(Car("Skoda", "Octavia", 1995, 150000));
 
-	cout << "Welcome to the car DB, type 'Q' to quit";
+	CarDB db(cars);
 
-	string i;
+	db.makeIndices();
+
+
+	cout << "Welcome to the car DB, type 'Q' to quit\nWrite P to search for a price\nWrite B to search for a brand\n";
+
+	string q;
 	while(true)
 	{
-		string q = getQuery();
+		cout << "Chose what to search for (P = price, B = brand): ";
+		getline(cin, q);
 
 		if(q == "Q")
 			break;
 		
-		if(q != "")
-			search(q, &cars);
+		if(q == "P"){
+			cout << "Enter your price: ";
+			getline(cin, q);
+			if(q == ""){
+				cout << "Bad query\n";
+				continue;
+			}
+
+			int price;
+			stringstream convert(q);
+			if(!(convert >> price)){
+				cout << "Bad query, not a price\n";
+				continue;
+			}
+
+			//db.findByPrice(price);
+		}
+
+		if(q == "B"){
+			cout << "Enter the brand: ";
+			getline(cin, q);
+			if(q == ""){
+				cout << "Bad query\n";
+				continue;
+			}
+			db.findByBrand(q);
+		}
 	}
 
 	return 0;
