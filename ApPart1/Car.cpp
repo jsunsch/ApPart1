@@ -13,5 +13,5 @@ bool operator==(const Car& c1, const Car& c2)
 }
 
 std::ostream& operator<<(std::ostream& s, const Car& c){
-	return s << "Brand: " << c.brand << "\nModel: " << c.model << "\nYear: " << c.year << "\nPrice: " << c.price << "\n(Last viewed :" << c.lastViewed << ")";
+	return s << "Brand: " << c.brand << "\nModel: " << c.model << "\nYear: " << c.year << "\nPrice: " << c.price << "\n(Last viewed: " << c.lastViewed << ")\n";
 }

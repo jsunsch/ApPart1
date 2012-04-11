@@ -50,7 +50,7 @@ void CarDB::makeIndices()
 		priceIndex.insert(pair<int, VCI>((*it).price, it));
 	}
 }
-
+/*
 void CarDB::findByPrice(const int p)
 {
 	vector<VCI> result;
@@ -72,7 +72,7 @@ void CarDB::findByPrice(const int p)
 		++it;
 	}
 }
-
+*/
 void CarDB::findByBrand(string& brand)
 {
 	Car searchCar(brand);
